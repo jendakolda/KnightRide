@@ -1,20 +1,22 @@
 # Write your code here
-from numpy import empty, where
+from numpy import empty, where, zeros
 
 
 class KnightRider:
     """Algorithmic solution of knights path thru all the fields on a chessboard"""
     # todo increase the number of dims of the chessboard 3d, 4d etc
     def __init__(self, rows=8, columns=8):
-        self.field = empty((rows, columns), dtype=str, order='F')
+        self.field = zeros((rows, columns), dtype=str, order='F')
+        # self.field[self.field == 0] = ' _ '
         self.rows = rows
         self.columns = columns
 
     def print_field(self):
-        print((2 * self.columns + 2) * '-')
+        print('', (2 * self.columns + 2) * '-')
         for i in range(self.rows):
-            print(f'{self.rows - i}|', *self.field[i], '|', sep=' ')
-        print((2 * self.columns + 2) * '-')
+            print(f'{self.rows - i}| ', *self.field[i], '|', sep='_ ')
+        print('',(2 * self.columns + 2) * '-')
+        print('  ', *(i+1 for i in range(self.columns)))
 
     def get_start(self):
         starting_pos = input('Input the x & y coordinate of the starting position: ').split()
@@ -24,12 +26,9 @@ class KnightRider:
             start_column, start_row = map(int, starting_pos)
             start_column -= 1
             start_row = self.rows - start_row
-
-
             print(start_column, start_row)
         else:
             print('Invalid dimensions!')
-
 
 
 if __name__ == '__main__':
