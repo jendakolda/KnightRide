@@ -14,8 +14,9 @@ class KnightRider:
             if two_numbers and pos_digits:
                 self.columns, self.rows = map(int, board_dim)
                 break
+            else:
+                print('Invalid dimensions!')
         self.row_marker = len(str(self.rows))
-        # self.col_marker = len(str(self.columns))
         self.cell = len(str(self.columns * self.rows))
         self.field = np.chararray((self.rows, self.columns), itemsize=self.cell, order='F')
         self.field[:] = self.cell * '_'
@@ -36,6 +37,10 @@ class KnightRider:
             starting_pos = input('Enter the knight\'s starting position: ').split()
             two_numbers = len(starting_pos) == 2
             all_digits = all(i.isdigit() for i in starting_pos)
+
+            if not two_numbers or not all_digits:
+                print('Invalid position!')
+                break
             is_inrange = int(starting_pos[0]) - 1 in range(self.columns) and int(starting_pos[1]) - 1 in range(self.rows)
 
             if two_numbers and all_digits and is_inrange:
