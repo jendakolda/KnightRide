@@ -27,7 +27,8 @@ class KnightRider:
         self.field[row, column] = (self.cell - 1) * ' ' + sign
 
     def range_check(self, checked_row, checked_column):
-        return checked_row in range(self.rows) and checked_column in range(self.columns)
+        return checked_row in range(self.rows) and checked_column in range(self.columns) \
+               and self.field[checked_row, checked_column].decode('utf-8') == self.cell * '_'
 
     def print_field(self):
         print(self.row_marker * ' ' + (self.columns * (self.cell + 1) + 3) * '-')
@@ -58,19 +59,25 @@ class KnightRider:
             else:
                 print('Invalid position!')
 
-    def get_possible_moves(self):
+    def get_possible_moves(self, row, column):
         moves = ((- 1, -2,), (-2, -1), (1, -2), (-2, 1), (-1, 2), (2, -1), (1, 2), (2, 1))
-        # possible_moves = []
+        possible_moves = []
         for move in moves:
-            new_pos = (self.current_row + move[0], self.current_column + move[1])
+            new_pos = (row + move[0], column + move[1])
             if self.range_check(new_pos[0], new_pos[1]):
-                self.mark_cell(new_pos[0], new_pos[1], 'O')
-                # possible_moves.append(new_pos)
+                possible_moves.append(new_pos)
+        return possible_moves
+
+    def main(self):
+        self.get_start()
+        possible_moves = self.get_possible_moves(self.current_row, self.current_column)
+        for move in possible_moves:
+            self.mark_cell(move[0], move[1], str(len(self.get_possible_moves(move[0], move[1]))))
+        self.print_field()
 
 
 if __name__ == '__main__':
     jezdec = KnightRider()
-    jezdec.get_start()
-    jezdec.get_possible_moves()
-    jezdec.print_field()
+    jezdec.main()
+
 
