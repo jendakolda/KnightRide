@@ -26,9 +26,15 @@ class KnightRider:
     def mark_cell(self, row, column, sign):
         self.field[row, column] = (self.cell - 1) * ' ' + sign
 
+    def empty_check(self, checked_row, checked_column):
+        return self.field[checked_row, checked_column].decode('utf-8') == self.cell * '_'
+
+    def possible_check(self, checked_row, checked_column):
+        possible_moves = self.get_possible_moves(self.current_row, self.current_column)
+        return (checked_row, checked_column) in possible_moves
+
     def range_check(self, checked_row, checked_column):
-        return checked_row in range(self.rows) and checked_column in range(self.columns) \
-               and self.field[checked_row, checked_column].decode('utf-8') == self.cell * '_'
+        return checked_row in range(self.rows) and checked_column in range(self.columns)
 
     def print_field(self):
         print(self.row_marker * ' ' + (self.columns * (self.cell + 1) + 3) * '-')
@@ -57,12 +63,12 @@ class KnightRider:
 
             if not two_numbers or not all_digits:
                 print('Invalid position!')
-            elif self.range_check(int(move_coords[1]) - 1, int(move_coords[0]) - 1):
+            elif self.range_check(int(move_coords[1]) - 1, int(move_coords[0]) - 1) \
+                    and self.empty_check(int(move_coords[1]) - 1, int(move_coords[0]) - 1):
                 self.current_column, self.current_row = map(int, move_coords)
                 self.current_column -= 1
                 self.current_row = self.rows - self.current_row
                 self.mark_cell(self.current_row, self.current_column, 'X')
-
                 break
             else:
                 print('Invalid position!')
@@ -72,7 +78,7 @@ class KnightRider:
         possible_moves = []
         for move in moves:
             new_pos = (row + move[0], column + move[1])
-            if self.range_check(new_pos[0], new_pos[1]):
+            if self.range_check(new_pos[0], new_pos[1]) and self.empty_check(new_pos[0], new_pos[1]):
                 possible_moves.append(new_pos)
         return possible_moves
 
